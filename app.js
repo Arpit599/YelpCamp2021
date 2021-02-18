@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Campground = require('./models/campground');
 const app = express();
 const methodOverride = require('method-override');
+const ejsMate = require('ejs-mate');
 
 mongoose.connect('mongodb://localhost:27017/yelpcamp', {
     useCreateIndex: true,
@@ -16,6 +17,16 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+app.engine('ejs', ejsMate);
+
+// app.use((req, res, next) => {
+//     console.log("This is first middleware");
+//     next();
+// })
+// app.use((req, res, next) => {
+//     console.log("This is second middleware");
+//     next();
+// })
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Error occured'));

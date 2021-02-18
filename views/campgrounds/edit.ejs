@@ -1,15 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add new campground</title>
-</head>
-
-<body>
-    <h1>Edit campground's details</h1>
+<% layout('/layouts/boilerplate') -%>
+    <!-- <h1>Edit campground's details</h1>
     <form action="/campgrounds/<%=campground._id%>?_method=PUT" method="POST">
         <section>
             <label for="title">Title</label>
@@ -20,10 +10,45 @@
             <input type="text" name="campground[location]" id="location" value="<%=campground.location %>">
         </section>
         <button>Update campground</button>
-    </form>
-    <div>
+    </form> -->
+    <!-- <div>
         <a href="/campgrounds">Cancel</a>
+    </div> -->
+    <h1 class="text-center">Edit Campground</h1>
+    <div class="row">
+        <div class="col-6 offset-3">
+            <form action="/campgrounds/<%=campground._id%>?_method=PUT" method="POST">
+                <div class="mb-3">
+                    <label class="form-label" for="title">Title</label>
+                    <input class="form-control" type="text" name="campground[title]" id="title"
+                        value="<%=campground.title%>">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="location">Location</label>
+                    <input class="form-control" type="text" name="campground[location]" id="location"
+                        value="<%=campground.location%>">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="image">Image URL</label>
+                    <input class="form-control" type="text" name="campground[image]" id="image"
+                        value="<%=campground.image%>">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="image">Campground's Price</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">$</span>
+                        <input type="text" class="form-control" name="campground[price]"
+                            aria-label="Amount (to the nearest dollar)" value="<%=campground.price%>">
+                        <span class="input-group-text">.00</span>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea class="form-control" type="text" name="campground[description]"
+                        id="description"><%=campground.description%></textarea>
+                </div>
+                <button class="btn btn-primary">Edit campground</button>
+                <a href="/campgrounds" class="btn btn-danger">Cancel</a>
+            </form>
+        </div>
     </div>
-</body>
-
-</html>
