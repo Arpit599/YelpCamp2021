@@ -7,6 +7,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const catchAsync = require("./utils/catchAsync");
 const expressError = require('./utils/expressError');
+const Joi = require('joi');
 
 mongoose.connect("mongodb://localhost:27017/yelpcamp", {
   useCreateIndex: true,
@@ -18,6 +19,7 @@ mongoose.connect("mongodb://localhost:27017/yelpcamp", {
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 
@@ -58,9 +60,25 @@ app.get("/campgrounds/:id", catchAsync(async (req, res) => {
 }));
 
 app.post("/campgrounds", catchAsync(async (req, res, next) => {
-    const campground = new Campground(req.body.campground);
-    await campground.save();
-    res.redirect(`/campgrounds/${campground._id}`);
+  const campgroundSchema = Joi.object({
+    campground: Joi.object({
+      title: Joi.string().required(),
+      price: Joi.number().required().min(0),
+      image: Joi.string().required(),
+      location: Joi.string().required(),
+      description: Joi.string().required()
+    }).required()
+  })
+  
+  const {error} = campgroundSchema.validate(req.body);
+
+  if (error) {
+    const msg = error.details.map(err => err.message).join(',');
+    throw new expressError(msg, 404);
+  }
+  const campground = new Campground(req.body.campground);
+  await campground.save();
+  res.redirect(`/campgrounds/${campground._id}`);
 }));
 
 app.get("/campgrounds/:id/edit", catchAsync(async (req, res) => {
@@ -71,10 +89,7 @@ app.get("/campgrounds/:id/edit", catchAsync(async (req, res) => {
 
 app.put("/campgrounds/:id", catchAsync(async (req, res) => {
   const { id } = req.params;
-  const campground = await Campground.findByIdAndUpdate(
-    id,
-    req.body.campground
-  );
+  const campground = await Campground.findByIdAndUpdate(id, req.body.campground);
   res.redirect(`/campgrounds/${campground._id}`);
 }));
 
@@ -89,10 +104,13 @@ app.all('*', (req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  const { statusCode = 500, message = 'Something went wrong'} = err;
-  res.status(statusCode).send(message);
+  const { statusCode = 500 } = err;
+  if (!err.message) {
+    err.message = 'Oh no! Something went wrong';
+  }
+  res.status(statusCode).render('campgrounds/error', {err});
   // res.send("OH NO! ERROR");
-  console.log(err.message);
+  // console.log(err.message);
 });
 
 app.listen(8000, (req, res) => {
