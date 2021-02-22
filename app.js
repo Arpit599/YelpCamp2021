@@ -8,7 +8,8 @@ const ejsMate = require("ejs-mate");
 const catchAsync = require("./utils/catchAsync");
 const expressError = require('./utils/expressError');
 //Destructuring so that more schemas can be accompanied later
-const {campgroundSchema} = require('./joiSchemas');
+const { campgroundSchema } = require('./joiSchemas');
+
 mongoose.connect("mongodb://localhost:27017/yelpcamp", {
   useCreateIndex: true,
   useNewUrlParser: true,
