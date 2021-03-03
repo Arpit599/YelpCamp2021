@@ -5,7 +5,6 @@ const catchAsync = require("../utils/catchAsync");
 const ExpressError = require('../utils/ExpressError');
 
 const { campgroundSchema } = require('../joiSchemas');
-
 const Campground = require("../models/campground");
 
 const validateCampgroundSchema = (req, res, next) => {
@@ -23,6 +22,10 @@ router.get("/", catchAsync(async (req, res) => {
   res.render("campgrounds/index", { campgrounds });
 }));
 
+router.get("/new", (req, res) => {
+  res.render("campgrounds/new");
+});
+
 router.get("/:id", catchAsync(async (req, res) => {
   const campground = await Campground.findById(req.params.id).populate('reviews');
   // console.log(campground);
@@ -32,13 +35,10 @@ router.get("/:id", catchAsync(async (req, res) => {
   res.render("campgrounds/show", { campground });
 }));
 
-router.get("/new", (req, res) => {
-  res.render("campgrounds/new");
-});
-
 router.post("/", validateCampgroundSchema, catchAsync(async (req, res, next) => {
   const campground = new Campground(req.body.campground);
   await campground.save();
+  req.flash('success', 'Successfully created campground');
   res.redirect(`/campgrounds/${campground._id}`);
 }));
 

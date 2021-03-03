@@ -4,7 +4,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-
+const flash = require('connect-flash');
 const ExpressError = require('./utils/ExpressError');
 const session = require('express-session');
 //Destructuring so that more schemas could be accompanied later
@@ -38,6 +38,7 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static('public'));
+app.use(flash());
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "Error occured"));
@@ -46,6 +47,10 @@ db.once("open", () => {
 });
 
 app.use(session(sessionConfig));
+app.use((req, res, next) => {
+  res.locals.success = req.flash('success');
+  next();
+});
 app.use('/campgrounds', campgroundRoutes);
 app.use('/campgrounds/:id', reveiwRoutes);
 
