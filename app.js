@@ -12,7 +12,7 @@ const localStrategy = require('passport-local');
 const User = require('./models/user');
 //Destructuring so that more schemas could be accompanied later
 // const { campgroundSchema, reviewSchema } = require('./joiSchemas');
-
+const userRoutes = require('./routes/userRoutes');
 const campgroundRoutes = require('./routes/campgroundRoutes');
 const reveiwRoutes = require('./routes/reviewRoutes');
 
@@ -60,6 +60,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 passport.use(new localStrategy(User.authenticate()));
 
+app.use('/', userRoutes);
 app.use('/campgrounds', campgroundRoutes);
 app.use('/campgrounds/:id', reveiwRoutes);
 
