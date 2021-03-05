@@ -7,6 +7,9 @@ const ejsMate = require("ejs-mate");
 const flash = require('connect-flash');
 const ExpressError = require('./utils/ExpressError');
 const session = require('express-session');
+const passport = require('passport');
+const localStrategy = require('passport-local');
+const User = require('./models/user');
 //Destructuring so that more schemas could be accompanied later
 // const { campgroundSchema, reviewSchema } = require('./joiSchemas');
 
@@ -52,6 +55,11 @@ app.use((req, res, next) => {
   res.locals.error = req.flash('error');
   next();
 });
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+passport.use(new localStrategy(User.authenticate()));
+
 app.use('/campgrounds', campgroundRoutes);
 app.use('/campgrounds/:id', reveiwRoutes);
 
@@ -59,6 +67,11 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
+app.get('/fakerequest', async (req, res) => {
+  const user = new User({ email: 'arpit@gmail.com', username: 'ab599' });
+  const savedUser = await User.register(user, 'monkey');
+  res.send(savedUser);
+})
 //If none of the routes above are matched, then execute this app.all for Page not found error
 app.all('*', (req, res, next) => {
   next(new ExpressError('Page not found', 404));
