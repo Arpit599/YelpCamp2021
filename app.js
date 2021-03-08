@@ -50,15 +50,20 @@ db.once("open", () => {
 });
 
 app.use(session(sessionConfig));
-app.use((req, res, next) => {
-  res.locals.success = req.flash('success');
-  res.locals.error = req.flash('error');
-  next();
-});
 
+app.use(passport.initialize());
+app.use(passport.session());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 passport.use(new localStrategy(User.authenticate()));
+
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  // console.log(req.session);
+  next();
+});
 
 app.use('/', userRoutes);
 app.use('/campgrounds', campgroundRoutes);
