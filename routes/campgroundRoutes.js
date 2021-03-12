@@ -1,22 +1,10 @@
 const express = require('express');
 const router = express.Router();
-
 const catchAsync = require("../utils/catchAsync");
-const ExpressError = require('../utils/ExpressError');
-
-const { campgroundSchema } = require('../joiSchemas');
 const Campground = require("../models/campground");
 const {isLoggedIn} = require('../middleware');
+const {validateCampgroundSchema, isAuthor} = require('../middleware');
 
-const validateCampgroundSchema = (req, res, next) => {
-  const {error} = campgroundSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map(err => err.message).join(',');
-    throw new ExpressError(msg, 404);
-  } else {
-    next(); //Very important can not be skipped otherwise page will get stuck
-  }
-}
 
 router.get("/", catchAsync(async (req, res) => {
   const campgrounds = await Campground.find();
@@ -28,8 +16,15 @@ router.get("/new", isLoggedIn, (req, res) => {
 });
 
 router.get("/:id", catchAsync(async (req, res) => {
-  const campground = await (await Campground.findById(req.params.id).populate('reviews').populate('author'));
-  // console.log(campground);
+  const campground = await (await Campground.findById(req.params.id).populate(
+    {
+      path: 'reviews',
+      populate: {
+        path: 'author'
+      }
+    }
+  ).populate('author'));
+  //console.log(campground);
   if (campground == null) {
     // throw new ExpressError('Invalid campground id', 404);
     req.flash('error', 'Cannot find requested campground');
@@ -50,39 +45,25 @@ router.post("/", isLoggedIn, validateCampgroundSchema, catchAsync(async (req, re
   res.redirect(`/campgrounds/${campground._id}`);
 }));
 
-router.get("/:id/edit", isLoggedIn, catchAsync(async (req, res) => {
+router.get("/:id/edit", isLoggedIn, isAuthor, catchAsync(async (req, res) => {
   const { id } = req.params;
   const campground = await Campground.findById(id);
   if (campground == null) {
     req.flash('error', 'Cannot find requested campground');
     return res.redirect('/campgrounds');
   }
-  if (!campground.author.equals(req.user._id)) {
-    req.flash('error', 'You do not have permission to do this');
-    return res.redirect(`/campgrounds/${id}`);
-  }
   res.render("campgrounds/edit", { campground });
 }));
 
-router.put("/:id", isLoggedIn, validateCampgroundSchema, catchAsync(async (req, res) => {
+router.put("/:id", isLoggedIn, isAuthor, validateCampgroundSchema, catchAsync(async (req, res) => {
   const { id } = req.params;
-  const camp = await Campground.findById(id);
-  if (!camp.author.equals(req.user._id)) {
-    req.flash('error', 'You do not have permission to do this');
-    return res.redirect(`/campgrounds/${id}`);
-  }
   const campground = await Campground.findByIdAndUpdate(id, req.body.campground);
   req.flash('success', 'Successfully updated campground');
   res.redirect(`/campgrounds/${campground._id}`);
 }));
 
-router.delete("/:id", isLoggedIn, catchAsync(async (req, res) => {
+router.delete("/:id", isLoggedIn, isAuthor, catchAsync(async (req, res) => {
   const { id } = req.params;
-  const camp = await Campground.findById(id);
-  if (!camp.author.equals(req.user._id)) {
-    req.flash('error', 'You do not have permission to do this');
-    return res.redirect(`/campgrounds/${id}`);
-  }
   await Campground.findByIdAndDelete(id);
   req.flash('success', 'Successfully deleted campground');
   res.redirect("/campgrounds");
