@@ -73,11 +73,6 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
-app.get('/fakerequest', async (req, res) => {
-  const user = new User({ email: 'arpit@gmail.com', username: 'ab599' });
-  const savedUser = await User.register(user, 'monkey');
-  res.send(savedUser);
-})
 //If none of the routes above are matched, then execute this app.all for Page not found error
 app.all('*', (req, res, next) => {
   next(new ExpressError('Page not found', 404));
