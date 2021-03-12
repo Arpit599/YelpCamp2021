@@ -28,19 +28,23 @@ router.get("/new", isLoggedIn, (req, res) => {
 });
 
 router.get("/:id", catchAsync(async (req, res) => {
-  const campground = await Campground.findById(req.params.id).populate('reviews');
-  // console.log(campground);
+  const campground = await (await Campground.findById(req.params.id).populate('reviews').populate('author'));
+  console.log(campground);
   if (campground == null) {
     // throw new ExpressError('Invalid campground id', 404);
     req.flash('error', 'Cannot find requested campground');
     //return statement is necessary otherwise two responses will be sent and node will throw error
     return res.redirect('/campgrounds');
   }
+ 
   res.render("campgrounds/show", { campground });
 }));
 
 router.post("/", isLoggedIn, validateCampgroundSchema, catchAsync(async (req, res, next) => {
   const campground = new Campground(req.body.campground);
+  campground.author = req.user._id;
+  // console.log(req.user._id);
+  // console.log(campground);
   await campground.save();
   req.flash('success', 'Successfully created campground');
   res.redirect(`/campgrounds/${campground._id}`);
