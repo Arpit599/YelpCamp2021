@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 const express = require("express");
 const app = express();
 const path = require("path");
@@ -15,6 +19,9 @@ const User = require('./models/user');
 const userRoutes = require('./routes/userRoutes');
 const campgroundRoutes = require('./routes/campgroundRoutes');
 const reveiwRoutes = require('./routes/reviewRoutes');
+
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
 
 const sessionConfig = {
   secret: 'SecretCode',
