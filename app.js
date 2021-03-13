@@ -20,9 +20,6 @@ const userRoutes = require('./routes/userRoutes');
 const campgroundRoutes = require('./routes/campgroundRoutes');
 const reveiwRoutes = require('./routes/reviewRoutes');
 
-const multer  = require('multer')
-const upload = multer({ dest: 'uploads/' })
-
 const sessionConfig = {
   secret: 'SecretCode',
   resave: true,
