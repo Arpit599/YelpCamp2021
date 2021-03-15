@@ -32,7 +32,9 @@ module.exports.renderCampgroundWithID = async (req, res) => {
 module.exports.createCampground = async (req, res, next) => {
   const campground = new Campground(req.body.campground);
   campground.author = req.user._id;
+  campground.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
   // console.log(req.user._id);
+  // console.log(req.files);
   // console.log(campground);
   await campground.save();
   req.flash('success', 'Successfully created campground');
