@@ -1,6 +1,7 @@
 (function () {
-                    'use strict'
-
+    'use strict'
+    //For making custom file input dynamic
+                    // bsCustomFileInput.init()
                     // Fetch all the forms we want to apply custom Bootstrap validation styles to
                     var forms = document.querySelectorAll('.needs-validation')
 

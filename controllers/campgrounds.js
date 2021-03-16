@@ -1,4 +1,6 @@
 const Campground = require("../models/campground");
+// Express automatically looks for the index.js file by default, therefore no need to specify the index.js
+const { cloudinary } = require("../cloudinary");
 
 module.exports.renderAll = async (req, res) => {
   const campgrounds = await Campground.find();
@@ -53,10 +55,19 @@ module.exports.rederEditForm = async (req, res) => {
 
 module.exports.updateCampground = async (req, res) => {
   const { id } = req.params;
+  // console.log(req.body);
   const campground = await Campground.findByIdAndUpdate(id, req.body.campground);
   const newImagesArray = req.files.map(f => ({ url: f.path, filename: f.filename }));
   campground.images.push(...newImagesArray);
   await campground.save();
+  if (req.body.deleteImages) {
+    console.log(req.body.deleteImages);
+    for (let filename of req.body.deleteImages) {
+      console.log(filename);
+      await cloudinary.uploader.destroy(filename);
+    }
+    await campground.updateOne({$pull: { images: { filename: {$in: req.body.deleteImages}}}})
+  }
   req.flash('success', 'Successfully updated campground');
   res.redirect(`/campgrounds/${campground._id}`);
 }

@@ -24,10 +24,6 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" for="image">Add Images</label>
-                    <input type="file" class="" name="campground[images]" id="image" multiple>
-                </div>
-                <div class="mb-3">
                     <label class="form-label" for="image">Campground's Price</label>
                     <div class="input-group mb-3">
                         <span class="input-group-text">$</span>
@@ -52,6 +48,10 @@
                     <div class="invalid-feedback">
                         Enter description!
                     </div>
+                </div>
+                <div class="input-group mt-4 mb-3">
+                    <input type="file" class="form-control" id="imageUpload" multiple>
+                    <label class="input-group-text" for="imageUpload">Upload</label>
                 </div>
                 <button class="btn btn-success">Add campground</button>
                 <a href="/campgrounds" class="btn btn-danger">Cancel</a>
