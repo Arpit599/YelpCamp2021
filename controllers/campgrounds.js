@@ -1,6 +1,8 @@
 const Campground = require("../models/campground");
 // Express automatically looks for the index.js file by default, therefore no need to specify the index.js
 const { cloudinary } = require("../cloudinary");
+const mbxGeoCoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const geoCoder = mbxGeoCoding({ accessToken: process.env.MAPBOX_TOKEN });
 
 module.exports.renderAll = async (req, res) => {
   const campgrounds = await Campground.find();
@@ -32,16 +34,23 @@ module.exports.renderCampgroundWithID = async (req, res) => {
 }
 
 module.exports.createCampground = async (req, res, next) => {
-  const campground = new Campground(req.body.campground);
-  campground.author = req.user._id;
-  campground.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
-  // console.log(req.user._id);
-  // console.log(req.files);
-  // console.log(campground);
-  await campground.save();
-  req.flash('success', 'Successfully created campground');
-  res.redirect(`/campgrounds/${campground._id}`);
-}
+  const geoData = await geoCoder.forwardGeocode({
+    query: req.body.campground.location,
+    limit: 1
+  }).send();
+  
+  res.send(geoData.body.features[0].center);
+
+//   const campground = new Campground(req.body.campground);
+//   campground.author = req.user._id;
+//   campground.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
+//   // console.log(req.user._id);
+//   // console.log(req.files);
+//   // console.log(campground);
+//   await campground.save();
+//   req.flash('success', 'Successfully created campground');
+//   res.redirect(`/campgrounds/${campground._id}`);
+ }
 
 module.exports.rederEditForm = async (req, res) => {
   const { id } = req.params;
