@@ -25,8 +25,25 @@ const reveiwRoutes = require('./routes/reviewRoutes');
 const mongooseSanitizer = require('express-mongo-sanitize');
 const helmet = require('helmet');
 
+const MongoStore = require('connect-mongo')(session);
+
+// const dbURL = process.env.DB_URL;
+const dbURL = process.env.DB_URL || "mongodb://localhost:27017/yelpcamp";
+const secret = process.env.SECRET || "SecretCode";
+
+const store = new MongoStore({
+  url: dbURL,
+  secret,
+  touchAfter: 24 * 60 * 60
+})
+
+store.on("error", function (e) {
+  console.log("Session store error", e);
+});
+
 const sessionConfig = {
-  secret: 'SecretCode',
+  store,
+  secret,
   resave: true,
   saveUninitialized: true,
   cookie: {
@@ -37,10 +54,8 @@ const sessionConfig = {
   }
 }
 
-const dbURL = process.env.DB_URL;
-
-// mongoose.connect("mongodb://localhost:27017/yelpcamp", {
 mongoose.connect(dbURL, {
+// mongoose.connect(dbURL, {
   useCreateIndex: true,
   useNewUrlParser: true,
   useUnifiedTopology: true,
