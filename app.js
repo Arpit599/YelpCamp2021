@@ -55,7 +55,6 @@ const sessionConfig = {
 }
 
 mongoose.connect(dbURL, {
-// mongoose.connect(dbURL, {
   useCreateIndex: true,
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -170,6 +169,8 @@ app.use((err, req, res, next) => {
   // console.log(err.message);
 });
 
-app.listen(8000, (req, res) => {
-  console.log("SERVER IS WORKING AT 8000");
+const port = process.env.PORT || 8000;
+
+app.listen(port, (req, res) => {
+  console.log(`SERVER IS WORKING AT ${port}`);
 });
