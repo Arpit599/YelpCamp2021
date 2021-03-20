@@ -3,7 +3,7 @@ const map = new mapboxgl.Map({
     container: 'cluster-map',
     style: 'mapbox://styles/mapbox/light-v10',
     center: [78, 22],
-    zoom: 3
+    zoom: 4
 });
  
 map.on('load', function () {
