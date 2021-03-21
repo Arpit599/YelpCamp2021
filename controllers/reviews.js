@@ -8,8 +8,8 @@ module.exports.makeReview = async (req, res) => {
   review.author = req.user._id;
   await review.save();
   await campground.save();
-  console.log(review);
-  console.log(campground);
+  //console.log(review);
+  //console.log(campground);
   req.flash('success', 'Successfully added review');
   res.redirect(`/campgrounds/${campground._id}`);
 }
