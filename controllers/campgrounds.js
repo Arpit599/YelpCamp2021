@@ -54,7 +54,7 @@ module.exports.createCampground = async (req, res, next) => {
   res.redirect(`/campgrounds/${campground._id}`);
  }
 
-module.exports.rederEditForm = async (req, res) => {
+module.exports.renderEditForm = async (req, res) => {
   const { id } = req.params;
   const campground = await Campground.findById(id);
   if (campground == null) {
