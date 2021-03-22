@@ -14,10 +14,12 @@ nav .nav-link{
     padding: 0.5rem 0.5rem;
     color: rgba(255,255,255,0.5);
     border-bottom: 0.25rem solid transparent;
+    margin-left: 0.35rem;
 }
 
 nav .nav-link.active{
     color: rgba(255,255,255, 1);
+    border-bottom-color: rgba(255,255,255,0.75);
 }
 
 nav .nav-link:hover{
