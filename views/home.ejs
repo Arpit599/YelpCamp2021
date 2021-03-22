@@ -34,11 +34,14 @@
             </nav>
         </header>
         <main class="mb-auto mx-auto welcomeContent text-center">
-            <h1>Hello <%=currentUser.username %>
-            </h1>
-            <p class="lead"> Welcome to YelpCamp! <br> Jump right in and explore our many campgrounds. <br>
-                Feel free to share some of your own and comment on others!</p>
-            <a href="/campgrounds" class="btn btn-light">View Campgrounds</a>
+            <% if(currentUser) {%>
+                <h1>Hello <%=currentUser.username %>,</h1>
+                <% } else {%>
+                    <h1>Hello Adventurer,</h1>
+                    <% } %>
+                        <p class="lead"> Welcome to YelpCamp! <br> Jump right in and explore our many campgrounds. <br>
+                            Feel free to share some of your own and comment on others!</p>
+                        <a href="/campgrounds" class="btn btn-light">View Campgrounds</a>
         </main>
     </div>
 </body>
