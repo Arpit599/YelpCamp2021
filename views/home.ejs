@@ -18,8 +18,8 @@
     <meta name="theme-color" content="#ffffff"> -->
 </head>
 
-<body class="mt-3">
-    <div class="cover-container d-flex h-100 w-100 mx-auto flex-column">
+<body class="mt-3 vh-100">
+    <div class="cover-container d-flex h-100 w-100 mx-auto flex-column align-center">
         <header class="mb-auto d-flex sticky-top">
             <h3>YelpCamp</h3>
             <nav class="nav navbar-expand-lg navbar-dark ms-auto">
@@ -33,7 +33,7 @@
                         <% } %>
             </nav>
         </header>
-        <main class="mb-auto mx-auto welcomeContent text-center">
+        <main class="mx-auto my-auto welcomeContent text-center">
             <% if(currentUser) {%>
                 <h1>Hello <%=currentUser.username %>,</h1>
                 <% } else {%>
@@ -43,6 +43,9 @@
                             Feel free to share some of your own and comment on others!</p>
                         <a href="/campgrounds" class="btn btn-light">View Campgrounds</a>
         </main>
+        <footer class="mt-auto text-white-50 text-center">
+            <p>&copy; YelpCamp 2021</p>
+        </footer>
     </div>
 </body>
 
