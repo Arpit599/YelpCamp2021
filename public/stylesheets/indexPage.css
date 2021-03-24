@@ -14,3 +14,8 @@ body{
     border-bottom-right-radius: 2rem;
     border-top-right-radius: 2rem;
 }
+
+.indexContentHolder{
+    border-radius: 2rem;
+    box-shadow: 0 2px 4px 5px rgba(255, 255, 255, 0.45);
+}
