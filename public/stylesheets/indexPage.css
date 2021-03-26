@@ -4,12 +4,6 @@ body{
 }
 
 .campgroundsContainer{
-    /* position: absolute; */
-    /* background-color: blueviolet; */
-    /* border: 2px solid grey; */
-    /* top: 0;
-    right: 0; */
-    /* padding: 2rem 2rem; */
     background-color: white;
     border-bottom-right-radius: 2rem;
     border-top-right-radius: 2rem;
