@@ -51,6 +51,7 @@ body{
     border-radius: 0.5rem;
     margin: 100px;
     position: relative;
+    box-shadow: rgba(0, 0, 0, 0.25) 0 0 50px 10px;
 }
 
 .card::before, .card::after{
