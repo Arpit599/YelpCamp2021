@@ -6,19 +6,19 @@ body{
     url("https://images.unsplash.com/photo-1536257104079-aa99c6460a5a?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80")
 }
 
-#registerNew{
+#alreadyUser{
     color: white;
     background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.85));
     border-bottom-left-radius: 0.5rem;
     border-top-left-radius: 0.5rem;
 }
 
-.loginHeader{
+.registerHeader{
     color: black;
     padding: 1rem;
 }
 
-#signinButton{
+#registerButton{
     font-weight: 600;
     font-size: 1.2rem;
     border: 1px solid #27b180;
@@ -36,12 +36,12 @@ body{
     transition: all 0.3s ease;
 }
 
-#signinButton:hover{
+#registerButton:hover{
     background-size: 40px 40px;
     outline: none;
 }
 
-#singinButton:focus, #signinButton:active{
+#registerButton:focus, #registerButton:active{
     outline: none;
 }
 
@@ -93,12 +93,12 @@ body{
     transition: all 0.3s ease;
 }
 
-.card-body form input[type="text"]:hover, .card-body form input[type="password"]:hover{
+.card-body form input[type="text"]:hover, .card-body form input[type="email"]:hover, .card-body form input[type="password"]:hover{
     border-color: #929292;
 }
 
-.card-body form input[type="text"]:focus, .card-body form input[type="password"]:focus,
-.card-body form input[type="text"]:active, .card-body form input[type="password"]:active{
+.card-body form input[type="text"]:focus, .card-body form input[type="email"]:focus, .card-body form input[type="password"]:focus,
+.card-body form input[type="text"]:active, .card-body form input[type="email"]:active, .card-body form input[type="password"]:active{
     border-color: #929292;
     box-shadow: none;
 }
